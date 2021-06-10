@@ -37,14 +37,14 @@ def refresh_expiring_jwts(response):
         return response
 
 
-@users.route("/")
-def hellow():
-    return ("hellow")
+# @users.route("/")
+# def hellow():
+#     return ("hellow")
 # routs decorators and functions:
 # each route has it's endpoint, allowed methods, and possible decorators. for example - jwt required.
 # this route is for getting all the users. since it should be only for admins, I didn't give it any auth yet.
 # custom exceptions: DoesNotExist if the db is empty, which will return 404 to the user.
-@users.route('/users',methods=["GET"])
+@users.route('/allusers',methods=["GET"])
 @jwt_required()
 def get_users():
     try:
@@ -64,7 +64,7 @@ def get_users():
 # I'll just serialize the dictionary to a json string with json.dumps.
 # sign up route. getting the user from the request body as json, hashing the password, and then uploading to the mongo db collection.
 # custom exceptions: NotUniqueError if the user email exists already, since the email is unique.
-@users.route("/users", methods=["POST"])
+@users.route("/signup", methods=["POST"])
 def sign_up():
     try:
         body = request.get_json()
@@ -84,7 +84,7 @@ def sign_up():
 # in the except block I handle the error, usually return the relevant Response instance, with the relevant status code.
 # login: verify the user credentials and then give him back a new jwt token, valid for certain time.
 # exceptions: UnauthorizedError if the user couldn't identify correctly.
-@users.route("/users/login", methods=["POST"])
+@users.route("/login", methods=["POST"])
 def login():
     try:
         body=request.get_json()
@@ -108,7 +108,7 @@ def login():
 # updating the password.
 # the email comes as a path params, and in the req.body we have the new password with key-value json format.
 
-@users.route("/users/",methods=["PUT"])
+@users.route("/update_password",methods=["PUT"])
 @jwt_required()
 def update_password():
     try:
@@ -123,7 +123,7 @@ def update_password():
     except Exception as e:
         return Response(json.dumps(e.args), mimetype="application/json", status=500)
 
-@users.route('/users/me', methods=["GET"])
+@users.route('/me', methods=["GET"])
 @jwt_required()
 def get_user():
     try:
@@ -140,7 +140,7 @@ def get_user():
 # since it's a sensitive action, it requires authentication.
 # plan to improve: need to get current user's details, so only the specified user can delete his account, and not anyone.
 # for that I'll use get_jwt_identity, very soon.
-@users.route('/users',methods=["DELETE"])
+@users.route('/delete',methods=["DELETE"])
 @jwt_required()
 def delete_user():
     try:
@@ -154,7 +154,7 @@ def delete_user():
 
 # all we need to do is response the client to delete his cookie, thats all.
 
-@users.route("/users/logout", methods=["GET"])
+@users.route("/logout", methods=["GET"])
 @jwt_required()
 def logout():
     try:

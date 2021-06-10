@@ -33,9 +33,9 @@ app.config['MONGODB_SETTINGS'] = {
     # 'host': 'mongodb://localhost/database_name'
 }
 initialize_db(app)
-@app.route('/',methods=["GET"])
-def hello():
-    return "hellow there!",200
+# @app.route('/',methods=["GET"])
+# def hello():
+#     return "hellow there!",200
 app.register_blueprint(users,url_prefix='/api/users')
 app.register_blueprint(messages,url_prefix='/api/messages')
 app.run(debug=True)

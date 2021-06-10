@@ -11,9 +11,9 @@ from mongoengine.queryset.visitor import Q
 messages = Blueprint('messages', __name__)
 
 
-@messages.route("/")
-def hellow():
-    return ("hellow")
+# @messages.route("/")
+# def hellow():
+#     return ("hellow")
 # routs decorators and functions:
 # each route has it's endpoint, allowed methods, and possible decorators. for example - jwt required.
 # this route is for getting all the users. since it should be only for admins, I didn't give it any auth yet.
@@ -32,7 +32,7 @@ def write_message():
     except Exception as e:
         return Response(json.dumps(e.args), mimetype="application/json", status=500)
 
-@messages.route('/',methods=["GET"])
+@messages.route('/allmessages',methods=["GET"])
 @jwt_required()
 def get_all_messages_of_user():
     try:
@@ -61,7 +61,7 @@ def read_last_unread_message():
 
 @messages.route('/readAll', methods=["GET"])
 @jwt_required()
-def read_last_unread_message():
+def read_all_unread_messages():
     try:
         print("reading new message")
         email = get_jwt_identity()
