@@ -16,6 +16,7 @@ werkzeug = "*"
 flask-cors = "*"
 awscli = "*"
 pytest = "*"
+gunicorn = "*"
 
 [dev-packages]
 
