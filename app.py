@@ -38,6 +38,6 @@ initialize_db(app)
 #     return "hellow there!",200
 app.register_blueprint(users,url_prefix='/api/users')
 app.register_blueprint(messages,url_prefix='/api/messages')
-app.run(debug=True)
+# app.run(debug=True)
 
 # to sum it up: all the blueprint does is just to import sub-routers into the app.
