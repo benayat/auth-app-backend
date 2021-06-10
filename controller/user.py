@@ -94,8 +94,9 @@ def login():
         if user.check_password(body["password"]):
             print("pasword is ok!")
             access_token = User.generateAuthToken(email)
-            user.pop("password",None)
-            response = jsonify({"user":user})
+            dict_user=json.loads(user)
+            dict_user.pop("password",None)
+            response = jsonify({"user":dict_user})
             set_access_cookies(response, access_token)
             return response, 200
         else:
