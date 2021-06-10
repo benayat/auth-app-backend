@@ -18,7 +18,7 @@ from controller.message import messages
 app=Flask(__name__)
 CORS(app)
 # configuring the app from an env file.
-app.config.from_envvar('ENV_FILE_LOCATION')
+# app.config.from_envvar('ENV_FILE_LOCATION')
 
 jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
