@@ -19,7 +19,7 @@ app=Flask(__name__)
 CORS(app)
 # configuring the app from an env file - only in development mode, in heroku I'll use the config varuables in the ui.
 # app.config.from_envvar('ENV_FILE_LOCATION')
-print(os.environ.get("JWT_SECRET_KEY"))
+# print(os.environ.get("JWT_SECRET_KEY"))
 jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
