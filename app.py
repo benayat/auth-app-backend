@@ -24,6 +24,7 @@ jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 # for production - to change everything to https:
 # app.config['JWT_COOKIE_SECURE'] = False
 
