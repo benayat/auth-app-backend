@@ -17,10 +17,10 @@ import re
 class Message(db.Document):
     sender = db.StringField(required=True, min_length=12, max_length=12, regex = re.compile(r"/d+"))
     receiver = db.StringField(required=True, max_length=50)
-    Message = db.EmailField(required=True, max_length=50)
+    message = db.EmailField(required=True, max_length=50)
     subject = db.StringField(required=True, max_length=30)
-    creation_date = db.DateTimeField(required=True, default=datetime.utcnow)
-    was_message_read = db.BooleanField(required=True, default=False)
+    creation_date = db.DateTimeField(default=datetime.utcnow)
+    was_message_read = db.BooleanField(default=False)
 
 """ 
 thoughts: 

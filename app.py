@@ -17,9 +17,9 @@ from controller.message import messages
 # registering the user blueprint I made earlier. 
 app=Flask(__name__)
 CORS(app)
-# configuring the app from an env file.
+# configuring the app from an env file - only in development mode, in heroku I'll use the config varuables in the ui.
 # app.config.from_envvar('ENV_FILE_LOCATION')
-
+print(os.environ.get("JWT_SECRET_KEY"))
 jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
@@ -33,9 +33,7 @@ app.config['MONGODB_SETTINGS'] = {
     # 'host': 'mongodb://localhost/database_name'
 }
 initialize_db(app)
-# @app.route('/',methods=["GET"])
-# def hello():
-#     return "hellow there!",200
+
 app.register_blueprint(users,url_prefix='/api/users')
 app.register_blueprint(messages,url_prefix='/api/messages')
 # app.run(debug=True)

@@ -59,7 +59,7 @@ def read_last_unread_message():
     except Exception as e:
         return Response(json.dumps(e.args), mimetype="application/json", status=500)
 
-@messages.route('/readAll', methods=["GET"])
+@messages.route('/readall', methods=["GET"])
 @jwt_required()
 def read_all_unread_messages():
     try:

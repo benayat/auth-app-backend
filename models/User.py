@@ -11,13 +11,10 @@ GENDER = ("male", "female")
 MEDICAL_CONDITIONS = ("poor", "bellow average", "average", "above average")
 
 class User(db.Document):
-    firstName = db.StringField(required=True, max_length=20)
-    lastName = db.StringField(required=True, max_length=30)
+    first_name = db.StringField(required=True, max_length=20)
+    last_name = db.StringField(required=True, max_length=30)
     email = db.EmailField(required=True, max_length=40, unique=True)
     password = db.StringField(required=True)
-    age = db.IntField(required=True, max_length=3)
-    gender = db.StringField(max_length=6, choices=GENDER)
-    medicalCondition = db.StringField(required=True, choises=MEDICAL_CONDITIONS)
     @staticmethod
     def encryptPassword(userRaw):
         salt = bcrypt.gensalt(rounds=8)

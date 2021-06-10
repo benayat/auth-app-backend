@@ -44,19 +44,19 @@ def refresh_expiring_jwts(response):
 # each route has it's endpoint, allowed methods, and possible decorators. for example - jwt required.
 # this route is for getting all the users. since it should be only for admins, I didn't give it any auth yet.
 # custom exceptions: DoesNotExist if the db is empty, which will return 404 to the user.
-@users.route('/allusers',methods=["GET"])
-@jwt_required()
-def get_users():
-    try:
-        # print("getting all users")
-        users=User.objects().to_json()
-        if not users:
-            raise DoesNotExist
-        return Response(users,mimetype="application/json", status=200)
-    except DoesNotExist as e:
-        return Response(json.dumps(e.args), mimetype="application/json", status=404)
-    except Exception as e:
-        return Response(json.dumps(e.args), mimetype="application/json", status=404)
+# @users.route('/allusers',methods=["GET"])
+# @jwt_required()
+# def get_users():
+#     try:
+#         # print("getting all users")
+#         users=User.objects().to_json()
+#         if not users:
+#             raise DoesNotExist
+#         return Response(users,mimetype="application/json", status=200)
+#     except DoesNotExist as e:
+#         return Response(json.dumps(e.args), mimetype="application/json", status=404)
+#     except Exception as e:
+#         return Response(json.dumps(e.args), mimetype="application/json", status=404)
 
 
         
