@@ -1,6 +1,7 @@
 
 import os
 from datetime import timedelta
+from flask.wrappers import Response
 # considering just raising the exception in the blueprint/view file, and then return the response here,
 # since it's almost the same code. on the other hand - I don't want to burden the app.py file, so I'm not sure.
 # from werkzeug.exceptions import HTTPException
@@ -32,7 +33,9 @@ app.config['MONGODB_SETTINGS'] = {
     # 'host': 'mongodb://localhost/database_name'
 }
 initialize_db(app)
-
+@app.route('/',methods=["GET"])
+def hello():
+    return "hellow there!",200
 app.register_blueprint(users,url_prefix='/api/users')
 app.register_blueprint(messages,url_prefix='/api/messages')
 app.run(debug=True)
