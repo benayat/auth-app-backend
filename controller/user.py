@@ -96,7 +96,7 @@ def login():
             access_token = User.generateAuthToken(email)
             dict_user=json.loads(user)
             dict_user.pop("password",None)
-            response = jsonify({"user":dict_user})
+            response = json.dumps({"user":dict_user})
             set_access_cookies(response, access_token)
             return response, 200
         else:
