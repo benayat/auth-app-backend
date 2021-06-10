@@ -15,6 +15,7 @@ import re
 
 
 class Message(db.Document):
+    meta = {'collection': 'messages'}
     sender = db.StringField(required=True, min_length=12, max_length=12, regex = re.compile(r"/d+"))
     receiver = db.StringField(required=True, max_length=50)
     message = db.EmailField(required=True, max_length=50)

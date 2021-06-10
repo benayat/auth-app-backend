@@ -11,6 +11,7 @@ GENDER = ("male", "female")
 MEDICAL_CONDITIONS = ("poor", "bellow average", "average", "above average")
 
 class User(db.Document):
+    meta = {'collection': 'users'}
     first_name = db.StringField(required=True, max_length=20)
     last_name = db.StringField(required=True, max_length=30)
     email = db.EmailField(required=True, max_length=40, unique=True)
