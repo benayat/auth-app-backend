@@ -11,6 +11,9 @@ from database.db import initialize_db
 from flask_jwt_extended import JWTManager
 from controller.user import users
 from controller.message import messages
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 # if I compare it to express, it's just like importing a router into the app.js file.
 # next steps: initializing the flask app, binding it to jwt manager, giving it the connection string to mongodb,
 # initializing the database with initialize_db function from db. file, and lastly,
@@ -22,7 +25,9 @@ CORS(app)
 # print(os.environ.get("JWT_SECRET_KEY"))
 jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
-app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
+app.config["JWT_CSRF_IN_COOKIES "]="True"
+# app.config("JWT_COOKIE_CSRF_PROTECT")="True"
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 # for production - to change everything to https:
@@ -37,6 +42,6 @@ initialize_db(app)
 
 app.register_blueprint(users,url_prefix='/api/users')
 app.register_blueprint(messages,url_prefix='/api/messages')
-# app.run(debug=True)
+app.run(debug=True)
 
 # to sum it up: all the blueprint does is just to import sub-routers into the app.

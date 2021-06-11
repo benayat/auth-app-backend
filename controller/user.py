@@ -94,9 +94,10 @@ def login():
         if user.check_password(body["password"]):
             print("pasword is ok!")
             access_token = User.generateAuthToken(email)
-            dict_user=json.loads(user)
-            dict_user.pop("password",None)
-            response = json.dumps({"user":dict_user})
+            print(user)
+            name=user.first_name+" "+user.last_name
+            print(name)
+            response = jsonify({"user":name, "id": str(user.id)})
             set_access_cookies(response, access_token)
             return response, 200
         else:
@@ -115,6 +116,7 @@ def update_password():
     try:
         body=request.get_json()
         email = get_jwt_identity()
+        print(email)
         User.objects.get(email=email).update(**body)
         return 'updated successfuly', 200
     except InvalidQueryError as e:
@@ -155,7 +157,7 @@ def delete_user():
 
 # all we need to do is response the client to delete his cookie, thats all.
 
-@users.route("/logout", methods=["GET"])
+@users.route("/logout", methods=["PUT"])
 @jwt_required()
 def logout():
     try:
