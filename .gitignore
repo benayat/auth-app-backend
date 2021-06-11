@@ -1,2 +1,3 @@
 *.pyc
 submit&testing/
+.env
