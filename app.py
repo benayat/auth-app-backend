@@ -1,4 +1,3 @@
-
 import os
 from datetime import timedelta
 from flask.wrappers import Response
@@ -29,7 +28,7 @@ app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 # this is how long does the access token live for.
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
-print(os.environ["MONGODB_PASSWORD"])# for production - to change everything to https:
+# for production - to change everything to https:
 app.config['JWT_COOKIE_SECURE'] = True
 
 app.config['MONGODB_SETTINGS'] = {
