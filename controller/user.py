@@ -11,7 +11,7 @@ from flask import Response, Blueprint, request,jsonify
 import json
 from flask_jwt_extended import create_access_token, get_jwt, jwt_required,get_jwt_identity, set_access_cookies, unset_jwt_cookies, set_refresh_cookies
 from datetime import timedelta, datetime, timezone
-from utils import time_to_gmt3
+from utils.time_to_gmt3 import get_local_time
 from models.User import User
 from mongoengine.errors import DoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError
 from .errors import UnauthorizedError
@@ -28,7 +28,7 @@ users = Blueprint('users', __name__)
 def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
-        now = time_to_gmt3(datetime.now(timezone.utc))
+        now = get_local_time(datetime.now(timezone.utc))
         print(now)
         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
