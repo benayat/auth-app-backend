@@ -1,7 +1,7 @@
 """ 
-imports: I used json to convert a dict to json for the responsed, with json.dumps method.
+imports: I used json to convert a dict to json for the response, with json.dumps method.
 - jwt_required to verify user token for the auth actions.
-- timedelta for limiting the token life time. for now it's 7 days, but it can change acording to the needs of security.
+- timedelta for limiting the token's life time. for now it's one hour, but it can change acording to the needs of security.
 - imported the user model I made.
 - imported the manual errors I made earlier. considering removing the error file, make it all happen here.
 
@@ -11,7 +11,7 @@ from flask import Response, Blueprint, request,jsonify
 import json
 from flask_jwt_extended import create_access_token, get_jwt, jwt_required,get_jwt_identity, set_access_cookies, unset_jwt_cookies, set_refresh_cookies
 from datetime import timedelta, datetime, timezone
-
+from utils import time_to_gmt3
 from models.User import User
 from mongoengine.errors import DoesNotExist, NotUniqueError, DoesNotExist, ValidationError, InvalidQueryError
 from .errors import UnauthorizedError
@@ -20,13 +20,16 @@ from .errors import UnauthorizedError
 users = Blueprint('users', __name__)
 
 # Using an `after_request` callback, we refresh any token that is within 30
-# minutes of expiring. Change the timedeltas to match the needs of your application.
-# source for this function: https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens/
+# minutes of expiring.
+# source in the docs: https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens/
+# since I added the utils package=>time_to_gmt3=>get_local_time function, I changed all messages create time to local israel time, 
+# so I need to change the time here as well.
 @users.after_request
 def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
+        now = time_to_gmt3(datetime.now(timezone.utc))
+        print(now)
         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
@@ -35,30 +38,6 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError):
         # Case where there is not a valid JWT. Just return the original respone
         return response
-
-
-# @users.route("/")
-# def hellow():
-#     return ("hellow")
-# routs decorators and functions:
-# each route has it's endpoint, allowed methods, and possible decorators. for example - jwt required.
-# this route is for getting all the users. since it should be only for admins, I didn't give it any auth yet.
-# custom exceptions: DoesNotExist if the db is empty, which will return 404 to the user.
-# @users.route('/allusers',methods=["GET"])
-# @jwt_required()
-# def get_users():
-#     try:
-#         # print("getting all users")
-#         users=User.objects().to_json()
-#         if not users:
-#             raise DoesNotExist
-#         return Response(users,mimetype="application/json", status=200)
-#     except DoesNotExist as e:
-#         return Response(json.dumps(e.args), mimetype="application/json", status=404)
-#     except Exception as e:
-#         return Response(json.dumps(e.args), mimetype="application/json", status=404)
-
-
         
 # I prefer to use the Response class, but since it can't return many types as data, 
 # I'll just serialize the dictionary to a json string with json.dumps.
@@ -69,10 +48,8 @@ def sign_up():
     try:
         body = request.get_json()
         body["password"]=User.encryptPassword(body)
-        print(body["password"])
         user=User(**body).save(force_insert=True)
         id=user.id
-        print(str(id))
         return Response(json.dumps({'id':str(id)}),mimetype="application/json",status=201)
     except NotUniqueError as e:
         return Response(json.dumps(e.args), mimetype="application/json", status=400)
@@ -90,13 +67,10 @@ def login():
         body=request.get_json()
         email=body.get('email')
         user = User.objects.get(email=email)
-        print(user)
         if user.check_password(body["password"]):
             print("pasword is ok!")
             access_token = User.generateAuthToken(email)
-            print(user)
             name=user.first_name+" "+user.last_name
-            print(name)
             response = jsonify({"user":name, "id": str(user.id)})
             set_access_cookies(response, access_token)
             return response, 200
@@ -141,8 +115,11 @@ def get_user():
 
 # simple delete function, based on the email, as a path param in the request. 
 # since it's a sensitive action, it requires authentication.
-# plan to improve: need to get current user's details, so only the specified user can delete his account, and not anyone.
-# for that I'll use get_jwt_identity, very soon.
+# plan to improve: need to get current user's location, with jwt_location and use it as an extra layer of security.
+
+# I decided to keep all messages in the archive, even after user is deleted, especially because 
+# there could be other users who still depend on it.
+
 @users.route('/delete',methods=["DELETE"])
 @jwt_required()
 def delete_user():
