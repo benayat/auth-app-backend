@@ -34,7 +34,7 @@ app.config['JWT_COOKIE_SECURE'] = True
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'moviesDB',
-    'host': "mongodb+srv://benayat:fmWAK3TLrJwHxr8@cluster0.ptwdq.mongodb.net/authDB?retryWrites=true&w=majority",
+    'host': f"mongodb+srv://benayat:{os.environ.get(MONGODB_PASSWORD)}@cluster0.ptwdq.mongodb.net/authDB?retryWrites=true&w=majority",
     # 'host': 'mongodb://localhost/database_name'
 }
 initialize_db(app)
