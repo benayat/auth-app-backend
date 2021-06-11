@@ -11,10 +11,10 @@ from database.db import initialize_db
 from flask_jwt_extended import JWTManager
 from controller.user import users
 from controller.message import messages
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # configuring the app from an env file - only in development mode, in heroku I'll use the config varuables in the ui.
-# load_dotenv()  # take environment variables from .env.
+load_dotenv()  # take environment variables from .env.
 # if I compare it to express, it's just like importing a router into the app.js file.
 # next steps: initializing the flask app, binding it to jwt manager, giving it the connection string to mongodb,
 # initializing the database with initialize_db function from db. file, and lastly,
@@ -29,13 +29,12 @@ app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 # this is how long does the access token live for.
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
-# for production - to change everything to https:
+print(os.environ["MONGODB_PASSWORD"])# for production - to change everything to https:
 app.config['JWT_COOKIE_SECURE'] = True
 
 app.config['MONGODB_SETTINGS'] = {
     'db': 'moviesDB',
-    'host': "mongodb+srv://benayat:{password}@cluster0.ptwdq.mongodb.net/authDB?retryWrites=true&w=majority"
-    .format(password=os.environ.get("MONGODB_PASSWORD")),
+    'host': "mongodb+srv://benayat:{password}@cluster0.ptwdq.mongodb.net/authDB?retryWrites=true&w=majority".format(password=os.environ.get("MONGODB_PASSWORD")),
     # 'host': 'mongodb://localhost/database_name'
 }
 initialize_db(app)
