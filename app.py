@@ -19,7 +19,7 @@ load_dotenv()  # take environment variables from .env.
 # initializing the database with initialize_db function from db. file, and lastly,
 # registering the user blueprint I made earlier. 
 app=Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 jwt = JWTManager(app)
 app.config['JWT_TOKEN_LOCATION'] = 'cookies'
