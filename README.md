@@ -6,7 +6,7 @@ some of the challenges I faced -
 * general auth for protected urls, and identity based auth.
 * security considerations about implementation.
 
-Some of the packages I used - flask-jwt-extende.
+Some of the packages I used - flask-jwt-extended, mongodb(as mongoengine).
 
-implementation decisions - I decided to use httponly cookies for the jwt access token, combined with csrf tokens, which will be sent back as a header - that's the best and most secure way I could find.
+implementation decisions - I decided to use httponly cookies for the jwt access token, combined with csrf tokens, which will be sent back form the client side as a header - that's the best and most secure way I could find.
 
